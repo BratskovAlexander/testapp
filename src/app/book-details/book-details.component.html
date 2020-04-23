@@ -1,0 +1,22 @@
+<div *ngIf="selectedBook">
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label>Name of book</mat-label>
+      <input matInput placeholder="Name of book" name="name" [(ngModel)]="selectedBook.name">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Author of book</mat-label>
+      <input matInput placeholder="Author of book" name="author" [(ngModel)]="selectedBook.author">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Genre of book</mat-label>
+      <input matInput placeholder="Genre of book" name="genre" [(ngModel)]="selectedBook.genre">
+    </mat-form-field>
+    <div class="example-button-row">
+      <button (click)='addBook()' mat-button>Add Book</button>
+      <button (click)='removeBook()' mat-button>Change book</button>
+    </div>
+    
+  </form>
+</div>
+ 
