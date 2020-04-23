@@ -1,22 +1,78 @@
-<div *ngIf="selectedBook">
-  <form class="example-form">
+<div *ngIf="selectedBook; else elseFormBlock">
+  <form [formGroup]="formBook" class="example-form">
     <mat-form-field class="example-full-width">
       <mat-label>Name of book</mat-label>
-      <input matInput placeholder="Name of book" name="name" [(ngModel)]="selectedBook.name">
+      <input
+        matInput
+        placeholder="Name of book"
+        type="text"
+        formControlName="name"
+      />
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label>Author of book</mat-label>
-      <input matInput placeholder="Author of book" name="author" [(ngModel)]="selectedBook.author">
+      <input
+        matInput
+        placeholder="Author of book"
+        name="author"
+        type="text"
+        formControlName="author"
+      />
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label>Genre of book</mat-label>
-      <input matInput placeholder="Genre of book" name="genre" [(ngModel)]="selectedBook.genre">
+      <mat-select formControlName="genre">
+        <mat-option *ngFor="let genre of genres" [value]="genre">
+          {{ genre }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
     <div class="example-button-row">
-      <button (click)='addBook()' mat-button>Add Book</button>
-      <button (click)='removeBook()' mat-button>Change book</button>
+      <button type="submit" (click)="addBook()" mat-button>Add Book</button>
+      <button type="submit" (click)="updateBook()" mat-button>
+        Update Book
+      </button>
     </div>
-    
   </form>
 </div>
- 
+
+<ng-template #elseFormBlock>
+  <form [formGroup]="formBook" class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label>Name of book</mat-label>
+      <input
+        matInput
+        placeholder="Name of book"
+        name="name"
+        type="text"
+        formControlName="name"
+      />
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Author of book</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Author of book"
+        name="author"
+        formControlName="author"
+      />
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Genre of book</mat-label>
+      <mat-select formControlName="genre">
+        <mat-option *ngFor="let genre of genres" [value]="genre">
+          {{ genre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="example-button-row">
+      <button type="submit" color="white" (click)="addBook()" mat-button>
+        Add Book
+      </button>
+      <button type="submit" color="white" (click)="updateBook()" mat-button>
+        Update Book
+      </button>
+    </div>
+  </form>
+</ng-template>

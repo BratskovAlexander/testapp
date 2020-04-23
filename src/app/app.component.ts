@@ -1,7 +1,9 @@
-import { GetBooks } from './booksList.action';
-import { Book } from './models';
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { BooksState } from './state/booksList.state';
+import { GetBooks, DeleteBook } from './state/booksList.action';
+import { Book } from './models/models';
+import { Component, OnInit, OnChanges } from '@angular/core';
+import { Store, Select } from '@ngxs/store';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +11,8 @@ import { Store } from '@ngxs/store';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  @Select(BooksState.books) booksList$: Observable<Book[]>;
+
   title = 'Books list';
   selectedBook: Book;
   books: Book[];
@@ -16,15 +20,14 @@ export class AppComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit() {
-    this.store.dispatch(GetBooks).subscribe((books) => {
-      this.books = books.books.books
-    });
-  }
-  onChange(){
-    console.log(2);
+    this.store.dispatch(GetBooks);
   }
 
   bookSelected(book: Book) {
-    this.selectedBook = book;
+    this.selectedBook = { ...book };
+  }
+
+  deleteBook(id: number) {
+    this.store.dispatch(new DeleteBook(id));
   }
 }

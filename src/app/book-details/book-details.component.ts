@@ -1,6 +1,7 @@
-import { Book } from './../models';
-import { AddBook, UpdateBook } from './../booksList.action';
-import { Component, OnInit, Input } from '@angular/core';
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { Book } from '../models/models';
+import { AddBook, UpdateBook } from '../state/booksList.action';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 @Component({
@@ -8,48 +9,41 @@ import { Store } from '@ngxs/store';
   templateUrl: './book-details.component.html',
   styleUrls: ['./book-details.component.css'],
 })
-export class BookDetailsComponent implements OnInit {
+export class BookDetailsComponent implements OnInit, OnChanges {
   @Input() books: Book[] = [];
   @Input() selectedBook: Book;
   public book: Book;
+  genres: string[] = ['Novel', 'Horror fiction', 'Fantasy Fiction'];
+  formBook = new FormGroup({
+    name: new FormControl(''),
+    author: new FormControl(''),
+    genre: new FormControl(''),
+  });
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, public fb: FormBuilder) {}
 
-  ngOnInit(): void {
-    console.log(this.book);
-    console.log(this.selectedBook);
+  ngOnInit(): void {}
+
+  ngOnChanges() {
     if (this.selectedBook) {
-      this.book.name = this.selectedBook.name;
-      this.book.author = this.selectedBook.author;
-      this.book.genre = this.selectedBook.genre;
+      this.formBook.get('name').setValue(this.selectedBook.name);
+      this.formBook.get('author').setValue(this.selectedBook.author);
+      this.formBook.get('genre').setValue(this.selectedBook.genre);
     }
-    this.book.name = this.book.name;
-    this.book.author = this.book.author;
-    this.book.genre = this.book.genre;
   }
 
   addBook() {
-    const data = {
-      id: this.books.length + 1,
-      name: this.selectedBook.name,
-      author: this.selectedBook.author,
-      genre: this.selectedBook.genre,
-    };
-    console.log(data);
-    this.store.dispatch(new AddBook(data));
-    this.book.name = '';
-    this.book.author = '';
-    this.book.genre = '';
+    this.store.dispatch(new AddBook(this.formBook.value));
+    this.formBook.get('name').setValue('');
+    this.formBook.get('author').setValue('');
+    this.formBook.get('genre').setValue('');
   }
 
-  removeBook() {
-    const data = {
-      id: this.books.length + 1,
-      name: this.selectedBook.name,
-      author: this.selectedBook.author,
-      genre: this.selectedBook.genre,
-    };
-    console.log(data);
-    this.store.dispatch(new UpdateBook(data));
+  updateBook() {
+    const book = { id: this.selectedBook.id, ...this.formBook.value };
+    this.store.dispatch(new UpdateBook(book));
+    this.formBook.get('name').setValue('');
+    this.formBook.get('author').setValue('');
+    this.formBook.get('genre').setValue('');
   }
 }

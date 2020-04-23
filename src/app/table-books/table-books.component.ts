@@ -1,35 +1,46 @@
-import { DeleteBook } from './../booksList.action';
 import { MatTableDataSource } from '@angular/material/table';
-import { Book } from '../models';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Book } from '../models/models';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+} from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-table-books',
   templateUrl: './table-books.component.html',
   styleUrls: ['./table-books.component.css'],
 })
-export class TableBooksComponent implements OnInit {
+export class TableBooksComponent implements OnInit, OnChanges {
   @Input() books: Book[];
   @Output() onChangeEl = new EventEmitter<Book>();
-  displayedColumns: string[] = ['id', 'name', 'genre', 'author', 'button'];
+  @Output() onDeleteEl = new EventEmitter<number>();
+  displayedColumns: string[] = ['id', 'name', 'author', 'genre', 'button'];
   dataSource = new MatTableDataSource<Book>();
+  genres: string[] = ['Novel', 'Horror fiction', 'Fantasy Fiction'];
+  genresList = new FormGroup({
+    genre: new FormControl(''),
+  });
 
-  constructor(private store: Store) {}
-
-  ngOnInit(): void {
-    // this.dataSource = new MatTableDataSource(this.books);
-  }
+  ngOnInit(): void {}
 
   ngOnChanges() {
     this.dataSource = new MatTableDataSource(this.books);
   }
 
-  selectedBook(data: any) {
+  searchGenres() {
+    this.dataSource.filter = this.genresList.value.genre;
+  }
+
+  selectedBook(data: Book) {
     this.onChangeEl.emit(data);
   }
 
-  removeBook(id: number) {
-    this.store.dispatch(new DeleteBook(id));
+  deleteBook(id: number) {
+    this.onDeleteEl.emit(id);
   }
 }

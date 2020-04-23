@@ -1,9 +1,36 @@
 table {
-    width: 100%;
-    margin: 1rem auto;
-  }
-  
-  th.mat-sort-header-sorted {
-    color: black;
-  }
-  
+  width: 95%;
+  margin: 0.2rem auto;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}
+
+.example-form,
+.example-container {
+  min-width: 500px;
+  width: 95%;
+  background-color: rgba(0, 0, 0, 0.7);
+  margin: 1rem auto;
+  color: rgb(255, 255, 255);
+}
+button {
+  border: solid 1px #c2185b;
+  margin: 1rem;
+}
+
+.example-full-width {
+  width: 95%;
+  padding: 1rem;
+}
+
+.input {
+  width: 95%;
+}

@@ -1,7 +1,7 @@
 import { GetBooks, AddBook, UpdateBook, DeleteBook } from './booksList.action';
-import { Book } from './models';
+import { Book } from '../models/models';
 import { Injectable } from '@angular/core';
-import { State, Action, StateContext } from '@ngxs/store';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
 
 const booksListDefault = [
   {
@@ -78,22 +78,26 @@ export interface BookModel {
 })
 @Injectable()
 export class BooksState {
+  @Selector() static books(state: BookModel) {
+    return state.books;
+  }
   @Action(GetBooks)
   getAllBooks(ctx: StateContext<BookModel>) {
-    ctx.getState().books;
     ctx.setState({ books: booksListDefault });
+    ctx.getState().books;
   }
 
   @Action(AddBook)
   addNewBook(ctx: StateContext<BookModel>, action: AddBook) {
-    const books = ctx.getState().books;
-    books.push(action.payload);
+    const books = [...ctx.getState().books];
+    const book = { id: books.length + 1, ...action.payload };
+    books.push(book);
     ctx.patchState({ books });
   }
 
   @Action(UpdateBook)
   update(ctx: StateContext<BookModel>, action: UpdateBook) {
-    const books = ctx.getState().books;
+    const books = [...ctx.getState().books];
     books.map((book) => {
       if (book.id === action.payload.id) {
         book.name = action.payload.name;
@@ -102,14 +106,13 @@ export class BooksState {
       }
     });
     ctx.patchState({ books });
-    console.log(books);
   }
 
   @Action(DeleteBook)
   delBook(ctx: StateContext<BookModel>, action: DeleteBook) {
-    const books = ctx.getState().books;
-    books.splice(action.payload - 1, 1);
+    const books = [...ctx.getState().books];
+    const idx = books.findIndex((el) => el.id === action.payload);
+    books.splice(idx, 1);
     ctx.patchState({ books });
-    console.log(books);
   }
 }

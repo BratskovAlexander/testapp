@@ -1,3 +1,9 @@
-<mat-toolbar color="accent"> {{ title | uppercase }} </mat-toolbar>
-<app-table-books [books]="books" (onChangeEl)="bookSelected($event)"></app-table-books>
-<app-book-details [selectedBook]="selectedBook"></app-book-details>
+<mat-toolbar> {{ title | uppercase }} </mat-toolbar>
+<div class="container">
+  <app-table-books
+    [books]="booksList$ | async"
+    (onChangeEl)="bookSelected($event)"
+    (onDeleteEl)="deleteBook($event)"
+  ></app-table-books>
+  <app-book-details [selectedBook]="selectedBook"></app-book-details>
+</div>
