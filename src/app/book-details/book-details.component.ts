@@ -22,7 +22,7 @@ export class BookDetailsComponent implements OnInit, OnChanges {
   @Output() onAddBook = new EventEmitter<Book>();
 
   public book: Book;
-  
+
   formBook = new FormGroup({
     name: new FormControl(''),
     author: new FormControl(''),

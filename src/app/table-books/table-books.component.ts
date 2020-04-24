@@ -7,8 +7,11 @@ import {
   Output,
   EventEmitter,
   OnChanges,
+  ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-table-books',
@@ -21,20 +24,29 @@ export class TableBooksComponent implements OnInit, OnChanges {
   @Output() onChangeEl = new EventEmitter<Book>();
   @Output() onDeleteEl = new EventEmitter<number>();
   @Output() selectionChange: EventEmitter<string>;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   displayedColumns: string[] = ['id', 'name', 'author', 'genre', 'button'];
   dataSource = new MatTableDataSource<Book>();
   genresList = new FormGroup({
     genre: new FormControl(''),
   });
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   ngOnChanges() {
     this.dataSource = new MatTableDataSource(this.books);
+    this.genresList.reset();
   }
 
   searchGenres(event) {
     this.dataSource.filter = event.value;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   selectedBook(data: Book) {
