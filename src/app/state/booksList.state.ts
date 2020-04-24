@@ -84,7 +84,6 @@ export class BooksState {
   @Action(GetBooks)
   getAllBooks(ctx: StateContext<BookModel>) {
     ctx.setState({ books: booksListDefault });
-    ctx.getState().books;
   }
 
   @Action(AddBook)
@@ -98,20 +97,15 @@ export class BooksState {
   @Action(UpdateBook)
   update(ctx: StateContext<BookModel>, action: UpdateBook) {
     const books = [...ctx.getState().books];
-    books.map((book) => {
-      if (book.id === action.payload.id) {
-        book.name = action.payload.name;
-        book.author = action.payload.author;
-        book.genre = action.payload.genre;
-      }
-    });
+    const idx = books.findIndex((book) => book.id === action.payload.id);
+    books.splice(idx, 1, action.payload);
     ctx.patchState({ books });
   }
 
   @Action(DeleteBook)
   delBook(ctx: StateContext<BookModel>, action: DeleteBook) {
     const books = [...ctx.getState().books];
-    const idx = books.findIndex((el) => el.id === action.payload);
+    const idx = books.findIndex((idBook) => idBook.id === action.payload);
     books.splice(idx, 1);
     ctx.patchState({ books });
   }

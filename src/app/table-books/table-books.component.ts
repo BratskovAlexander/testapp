@@ -17,11 +17,12 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class TableBooksComponent implements OnInit, OnChanges {
   @Input() books: Book[];
+  @Input() genres: string[];
   @Output() onChangeEl = new EventEmitter<Book>();
   @Output() onDeleteEl = new EventEmitter<number>();
+  @Output() selectionChange: EventEmitter<string>;
   displayedColumns: string[] = ['id', 'name', 'author', 'genre', 'button'];
   dataSource = new MatTableDataSource<Book>();
-  genres: string[] = ['Novel', 'Horror fiction', 'Fantasy Fiction'];
   genresList = new FormGroup({
     genre: new FormControl(''),
   });
@@ -32,8 +33,8 @@ export class TableBooksComponent implements OnInit, OnChanges {
     this.dataSource = new MatTableDataSource(this.books);
   }
 
-  searchGenres() {
-    this.dataSource.filter = this.genresList.value.genre;
+  searchGenres(event) {
+    this.dataSource.filter = event.value;
   }
 
   selectedBook(data: Book) {

@@ -2,9 +2,7 @@
 .example-container {
   min-width: 500px;
   width: 95%;
-  background-color: rgba(0, 0, 0, 0.7);
   margin: 1rem auto;
-  color: rgb(255, 255, 255);
 }
 
 .example-full-width {
@@ -17,6 +15,6 @@
   justify-content: center;
 }
 button {
-  border: solid 1px #c2185b;
+  border: solid 1px #673ab7;
   margin: 0.2rem auto;
 }

@@ -2,8 +2,14 @@
 <div class="container">
   <app-table-books
     [books]="booksList$ | async"
+    [genres]="genres"
     (onChangeEl)="bookSelected($event)"
     (onDeleteEl)="deleteBook($event)"
   ></app-table-books>
-  <app-book-details [selectedBook]="selectedBook"></app-book-details>
+  <app-book-details
+    (onUpdateBook)="updateBook($event)"
+    (onAddBook)="addBook($event)"
+    [selectedBook]="selectedBook"
+    [genres]="genres"
+  ></app-book-details>
 </div>
