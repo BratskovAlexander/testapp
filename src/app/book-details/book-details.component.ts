@@ -1,4 +1,4 @@
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Book } from '../models/models';
 import {
   Component,
@@ -24,9 +24,9 @@ export class BookDetailsComponent implements OnInit, OnChanges {
   public book: Book;
 
   formBook = new FormGroup({
-    name: new FormControl(''),
-    author: new FormControl(''),
-    genre: new FormControl(''),
+    name: new FormControl('', Validators.required),
+    author: new FormControl('', Validators.required),
+    genre: new FormControl('', Validators.required),
   });
 
   ngOnInit(): void {}
@@ -40,9 +40,11 @@ export class BookDetailsComponent implements OnInit, OnChanges {
   }
 
   addBook() {
-    const book = this.formBook.value;
-    this.onAddBook.emit(book);
-    this.formBook.reset();
+    if (this.formBook.valid) {
+      const book = this.formBook.value;
+      this.onAddBook.emit(book);
+      this.formBook.reset();
+    }
   }
 
   updateBook() {

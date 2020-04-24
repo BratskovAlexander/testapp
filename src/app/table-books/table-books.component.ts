@@ -32,13 +32,12 @@ export class TableBooksComponent implements OnInit, OnChanges {
     genre: new FormControl(''),
   });
 
-  ngOnInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+  ngOnInit(): void {}
 
   ngOnChanges() {
     this.dataSource = new MatTableDataSource(this.books);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
     this.genresList.reset();
   }
 
